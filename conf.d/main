@@ -38,8 +38,11 @@ service docker start
 # ## Beaker ##
 # Port 8800
 # ############
-docker pull quarkdsci/beaker-notebook
-docker run -p 3000:8800 --name beaker -t quarkdsci/beaker-notebook
+git clone https://github.com/twosigma/beaker-notebook.git
+cd beaker-notebook
+. launcher/ubuntu/install-dependencies.sh
+gradle run
+cd ~
 
 # ###########
 # ## Julia ##
