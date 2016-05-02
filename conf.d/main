@@ -38,8 +38,8 @@ service docker start
 # ## Beaker ##
 # Port 8800
 # ############
-docker pull beakernotebook/beaker
-docker run -p 3000:8800 --name beaker -t beakernotebook/beaker
+docker pull quarkdsci/beaker-notebook
+docker run -p 3000:8800 --name beaker -t quarkdsci/beaker-notebook
 
 # ###########
 # ## Julia ##
