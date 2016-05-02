@@ -1,0 +1,5 @@
+Web shell:  https://$ipaddr:12320
+Webmin:     https://$ipaddr:12321
+Beaker:     https://$ipaddr:3000
+Caravel:    https://$ipaddr:4000
+SSH/SFTP:   root@$ipaddr (port 22)

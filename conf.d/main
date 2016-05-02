@@ -1,0 +1,118 @@
+#!/bin/sh -ex
+
+# ##############
+# ## Anaconda ##
+# ##############
+wget http://repo.continuum.io/archive/Anaconda2-4.0.0-Linux-x86_64.sh
+bash Anaconda2-4.0.0-Linux-x86_64.sh -b
+echo 'export PATH=/root/anaconda2/bin:$PATH' >> .bashrc
+
+# #############
+# ## GNU AIS ##
+# #############
+add-apt-repository ppa:saltmakrell/gnuais
+apt-get update
+apt-get install gnuais
+
+# ############
+# ## Docker ##
+# ############
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+# Check if docker source list exists, if it does, remove it and add it again
+if [-a /etc/apt/sources.list.d/docker.list]
+  then
+    rm /etc/apt/sources.list.d/docker.list
+    touch /etc/apt/sources.list.d/docker.list
+  else
+    touch /etc/apt/sources.list.d/docker.list
+fi
+
+deb https://apt.dockerproject.org/repo debian-jessie main
+
+apt-get update
+apt-cache policy docker-engine
+apt-get install docker-engine
+service docker start
+
+# ############
+# ## Beaker ##
+# Port 8800
+# ############
+docker pull beakernotebook/beaker
+docker run -p 3000:8800 --name beaker -t beakernotebook/beaker
+
+# ###########
+# ## Julia ##
+# ###########
+add-apt-repository ppa:staticfloat/juliareleases
+add-apt-repository ppa:staticfloat/julia-deps
+apt-get update
+apt-get install julia
+
+# #############
+# ## Node.js ##
+# #############
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+apt-get install -y nodejs
+
+
+# ###########
+# ## Torch ##
+# ###########
+git clone https://github.com/torch/distro.git ~/torch --recursive
+cd ~/torch; bash install-deps;
+./install.sh
+source ~/.bashrc
+
+
+# ###############
+# ## Scala/SBT ##
+# ###############
+apt-get remove scala-library scala
+wget www.scala-lang.org/files/archive/scala-2.12.0-M4.deb
+dpkg -i scala-2.12.0-M4.deb
+apt-get update
+apt-get install scala
+echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+apt-get update
+apt-get install sbt
+
+# #############
+# ## Caravel ##
+# Port 4000
+# #############
+
+# Install caravel
+pip install caravel mysqlclient psycopg2 pyhive cx_oracle sqlalchemy-redshift pymssql
+
+# Create caravel directory
+mkdir caravel
+cd ./caravel
+
+# Create an admin user
+fabmanager create-admin --app caravel --username="caravel" --firstname="admin" --lastname="user" --email="admin@caravel.local" --password "caravel"
+# Initialize the database
+caravel db upgrade
+# Create default roles and permissions
+caravel init
+# Start the development web server
+caravel runserver --port=4000
+
+# ##################
+# ## PredictionIO ##
+# ##################
+
+bash -c "$(curl -s https://install.prediction.io/install.sh)"
+
+# ###################
+# ## SFrame (DATO) ##
+# ###################
+pip install -U sframe
+
+# ##########
+# ## Weka ##
+# ##########
+cd ~
+wget http://prdownloads.sourceforge.net/weka/weka-3-8-0.zip
+unzip weka-3-8-0.zip
