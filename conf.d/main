@@ -12,7 +12,7 @@ echo 'export PATH=/root/anaconda2/bin:$PATH' >> .bashrc
 # #############
 add-apt-repository ppa:saltmakrell/gnuais
 apt-get update
-apt-get install gnuais
+apt-get install -y gnuais
 
 # ############
 # ## Docker ##
@@ -31,7 +31,7 @@ deb https://apt.dockerproject.org/repo debian-jessie main
 
 apt-get update
 apt-cache policy docker-engine
-apt-get install docker-engine
+apt-get install -y docker-engine
 service docker start
 
 # ############
@@ -50,7 +50,7 @@ cd ~
 add-apt-repository ppa:staticfloat/juliareleases
 add-apt-repository ppa:staticfloat/julia-deps
 apt-get update
-apt-get install julia
+apt-get install -y julia
 
 # #############
 # ## Node.js ##
@@ -79,7 +79,7 @@ apt-get install scala
 echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
 apt-get update
-apt-get install sbt
+apt-get install -y sbt
 
 # #############
 # ## Caravel ##
